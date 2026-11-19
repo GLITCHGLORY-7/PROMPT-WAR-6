@@ -423,8 +423,12 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
   console.log(`🚀 AeroPulse AI Production Server active at http://localhost:${PORT}`);
   console.log(`🤖 Configured Gemini Model: ${MODEL}`);
   console.log(`🔒 Server Key Configured: ${!!(process.env.GEMINI_API_KEY || GEMINI_API_KEY)} (Header Auth: x-goog-api-key)`);
 });
+
+}
+export default server;

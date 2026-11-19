@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/advisory", "destination": "/api/advisory.js" },
+    { "source": "/api/status", "destination": "/api/status.js" },
+    { "source": "/api/pledge", "destination": "/api/pledge.js" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
