@@ -11,6 +11,7 @@ console.log('================================================================\n'
 
 const audits = [
   { name: 'Unit, Functional & Problem Alignment Test Suite', file: path.join(__dirname, 'aeropulse.test.js') },
+  { name: 'Targeted Five-Issue Compliance Suite', file: path.join(__dirname, 'targeted_corrections.test.js') },
   { name: 'WCAG 2.2 AA Accessibility Audit', file: path.join(__dirname, 'a11y_audit.js') },
   { name: 'Security & Input Sanitization Audit', file: path.join(__dirname, 'security_audit.js') },
   { name: 'Performance, Memory & Efficiency Audit', file: path.join(__dirname, 'efficiency_audit.js') },

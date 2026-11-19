@@ -115,8 +115,9 @@ global.setTimeout = (fn) => fn();
 
 vm.runInThisContext(scriptCode);
 assert.ok(global.state, 'Application state initialized');
-assert.strictEqual(global.state.aqi, 465, 'Default Delhi Severe Inversion AQI 465 initialized');
-console.log('  ✅ Application state machine & reactive DOM context operational.');
+assert.strictEqual(global.state.aqi, 448, 'Verified Delhi Anand Vihar DPCC AQI 448 initialized');
+assert.strictEqual(global.state.pm25, 412, 'Verified Delhi Anand Vihar PM2.5 412 initialized');
+console.log('  ✅ Application state machine & reactive DOM context operational with verified baselines.');
 
 // -------------------------------------------------------------
 // STAGE 3: CUJ 1 — Emergency Monitoring & Meteorological Station Switching
@@ -126,9 +127,9 @@ console.log('\n📍 STAGE 3: CUJ 1 — Station Recalibration & Inversion Trackin
 // 1. Switch to Lahore Metro hotspot
 global.setHotspot('lahore');
 assert.strictEqual(global.state.city, 'Lahore Metro', 'Station city should be Lahore Metro');
-assert.strictEqual(global.state.aqi, 492, 'Lahore AQI should be 492');
+assert.strictEqual(global.state.aqi, 472, 'Lahore AQI should be 472 (24h average)');
 assert.strictEqual(global.state.pm25, 460, 'Lahore PM2.5 should be 460');
-console.log('  ✅ Switched to Lahore Metro: AQI 492 (Hazardous Emergency Inversion).');
+console.log('  ✅ Switched to Lahore Metro: AQI 472 (Hazardous Emergency Inversion).');
 
 // 2. Custom Station Calibration via Form Input
 getMockEl('inputCustomCity').value = 'Patna';
@@ -146,7 +147,7 @@ console.log('  ✅ Custom meteorological station configured: Patna (Kankarbagh),
 console.log('\n🧠 STAGE 4: CUJ 2 — GenAI Personalized Smog Advisory Strategy');
 
 getMockEl('aiSmogPrompt').value = 'Family in Delhi with 6-year-old child with asthma, kerosene heater, school transit';
-global.handleSmogPrompt({ preventDefault: () => {} });
+await global.handleSmogPrompt({ preventDefault: () => {} });
 
 assert.strictEqual(global.state.vulnerability, 'kids', 'GenAI persona adapted to children & schools');
 const schoolTransit = global.state.routines.find(r => r.id === 'r2');

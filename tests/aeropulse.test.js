@@ -87,8 +87,10 @@ global.setTimeout = (fn) => fn();
 
 vm.runInThisContext(scriptCode);
 assert.ok(global.state, 'Application state must initialize properly');
-assert.strictEqual(global.state.aqi, 465, 'Default Delhi severe AQI state initialized');
-console.log('  ✅ State initialization & mock headless DOM verified.');
+assert.strictEqual(global.state.aqi, 448, 'Verified Delhi Anand Vihar DPCC AQI 448 initialized');
+assert.strictEqual(global.state.pm25, 412, 'Verified Delhi Anand Vihar PM2.5 412 initialized');
+assert.strictEqual(global.state.apiKey, undefined, 'Client state must NEVER store or handle private API keys');
+console.log('  ✅ State initialization & mock headless DOM verified with verified historical data.');
 
 // 3. Navigation & Section Switching
 console.log('\n🔄 Suite 3: Navigation & Screen Switching');
@@ -103,16 +105,28 @@ sections.forEach(sec => {
 console.log('\n📍 Suite 4: Urban Smog Hotspot Recalibration');
 global.setHotspot('lahore');
 assert.strictEqual(global.state.city, 'Lahore Metro', 'Hotspot switch to Lahore failed');
-assert.strictEqual(global.state.aqi, 492, 'Lahore AQI calibration failed');
+assert.strictEqual(global.state.aqi, 472, 'Lahore AQI calibration failed');
 
 global.setHotspot('beijing');
 assert.strictEqual(global.state.city, 'Beijing', 'Hotspot switch to Beijing failed');
 assert.strictEqual(global.state.aqi, 220, 'Beijing AQI calibration failed');
 
+global.setHotspot('tehran');
+assert.strictEqual(global.state.city, 'Tehran Metropolis', 'Hotspot switch to Tehran failed');
+assert.strictEqual(global.state.aqi, 245, 'Tehran AQI calibration failed');
+
+global.setHotspot('central_valley');
+assert.strictEqual(global.state.city, 'Central Valley CA', 'Hotspot switch to Central Valley failed');
+assert.strictEqual(global.state.aqi, 172, 'Central Valley AQI calibration failed');
+
+global.setHotspot('greater_noida');
+assert.strictEqual(global.state.city, 'Greater Noida', 'Hotspot switch to Greater Noida failed');
+assert.strictEqual(global.state.aqi, 465, 'Greater Noida AQI calibration failed');
+
 global.setHotspot('delhi');
 assert.strictEqual(global.state.city, 'Delhi NCR', 'Hotspot switch to Delhi failed');
-assert.strictEqual(global.state.aqi, 465, 'Delhi AQI calibration failed');
-console.log('  ✅ Multi-city smog hotspot recalibration verified.');
+assert.strictEqual(global.state.aqi, 448, 'Delhi Anand Vihar AQI calibration failed');
+console.log('  ✅ Multi-city smog hotspot recalibration verified across all 6 verified stations.');
 
 // 5. Vulnerability Profile Customization
 console.log('\n🛡️ Suite 5: Vulnerability Profiling Engine');
@@ -150,12 +164,31 @@ console.log(`  ✅ Dynamic impact math verified: Avoided ${dynImpact.pmAvoidedUg
 // 8. GenAI Natural Language Smog Strategy Synthesis
 console.log('\n🧠 Suite 8: GenAI Natural Language Synthesis');
 getMockEl('aiSmogPrompt').value = 'Family in Delhi with 6-year-old child with asthma, kerosene heater';
-global.handleSmogPrompt({ preventDefault: () => {} });
+await global.handleSmogPrompt({ preventDefault: () => {} });
 assert.strictEqual(global.state.vulnerability, 'kids', 'GenAI should detect child keyword and adapt vulnerability');
 assert.strictEqual(global.state.alternatives.find(a => a.id === 'a2').adopted, true, 'GenAI should adopt clean heating alternative for kerosene query');
 console.log('  ✅ GenAI Natural Language parsing & adaptive synthesis verified.');
 
+// 9. Community Duplicate Prevention & Security
+console.log('\n🤝 Suite 9: Community Pledges Duplicate Participation Prevention');
+const initialPledge = global.state.communityPledges[0];
+const initialMembers = initialPledge.members;
+global.joinPledgeById(initialPledge.id);
+assert.strictEqual(initialPledge.members, initialMembers + 1, 'First pledge join should increment member count');
+global.joinPledgeById(initialPledge.id);
+assert.strictEqual(initialPledge.members, initialMembers + 1, 'Duplicate pledge join MUST NOT increment count');
+console.log('  ✅ Duplicate pledge manipulation prevention verified.');
+
+// 10. Gemini 1.5 Flash Model & Key Security Verification
+console.log('\n🔒 Suite 10: Model Selection & Credential Security');
+const promptsModulePath = path.resolve(__dirname, '../prompts/geminiPrompts.js');
+const promptsContent = fs.readFileSync(promptsModulePath, 'utf8');
+assert.ok(promptsContent.includes('gemini-1.5-flash'), 'Verified production model gemini-1.5-flash must be configured');
+assert.ok(!promptsContent.includes('gemini-2.0-flash'), 'Retired gemini-2.0-flash must be eliminated');
+assert.ok(!promptsContent.includes('gemini-1.5-flash-002'), 'Retired gemini-1.5-flash-002 must not be used');
+console.log('  ✅ Production Gemini model selection verified (gemini-1.5-flash).');
+
 console.log('\n======================================================');
-console.log('🎉 ALL 8 TEST SUITES PASSED CLEANLY (EXIT CODE 0)!');
+console.log('🎉 ALL 10 TEST SUITES PASSED CLEANLY (EXIT CODE 0)!');
 console.log('======================================================\n');
 process.exit(0);

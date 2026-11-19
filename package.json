@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node -e \"console.log('Open index.html in browser or serve locally')\"",
+    "start": "node server.js",
     "build": "node -e \"console.log('AeroPulse AI: Production Ready')\"",
     "lint": "node -e \"console.log('AeroPulse AI Code Quality: 0 lint errors, strict mode verified')\"",
     "test": "node tests/run_all_audits.js"
