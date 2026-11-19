@@ -397,30 +397,46 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Static File Serving
-  let reqPath = req.url === '/' ? '/index.html' : req.url.split('?')[0];
-  const safePath = path.normalize(path.join(__dirname, reqPath));
+  // Static File Serving with multi-directory resolution (Vercel Lambda & Local)
+  let rawPath = (req.url === '/' || !req.url || req.url === '') ? 'index.html' : req.url.split('?')[0];
+  if (rawPath.startsWith('/')) rawPath = rawPath.slice(1);
+  if (!rawPath) rawPath = 'index.html';
 
-  // Path Traversal Guard
-  if (!safePath.startsWith(__dirname)) {
-    res.writeHead(403, { 'Content-Type': 'text/plain' });
-    res.end('Forbidden');
+  function resolveStaticPath(relPath) {
+    const cleanRel = path.normalize(relPath).replace(/^(\.\.[\/\\])+/, '');
+    const searchDirs = [
+      process.cwd(),
+      __dirname,
+      path.join(process.cwd(), 'challenge-6-cleanair'),
+      path.join(__dirname, '..')
+    ];
+    for (const dir of searchDirs) {
+      const candidate = path.join(dir, cleanRel);
+      try {
+        if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+          return candidate;
+        }
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  let safePath = resolveStaticPath(rawPath);
+  if (!safePath && !rawPath.includes('.')) {
+    safePath = resolveStaticPath('index.html');
+  }
+
+  if (!safePath) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
     return;
   }
 
-  fs.stat(safePath, (err, stats) => {
-    if (err || !stats.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('Not Found');
-      return;
-    }
+  const ext = path.extname(safePath).toLowerCase();
+  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    const ext = path.extname(safePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
-    res.writeHead(200, { 'Content-Type': contentType });
-    fs.createReadStream(safePath).pipe(res);
-  });
+  res.writeHead(200, { 'Content-Type': contentType });
+  fs.createReadStream(safePath).pipe(res);
 });
 
 if (!process.env.VERCEL) {
