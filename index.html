@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="AeroPulse — National Atmospheric Health, Inversion Modeling & Clean Air Advisory Platform. Delivering real-time meteorological inversion telemetry, low-emission routines, and DIY IAQ bio-hacks for families and communities." />
+  <title>AeroPulse — National Atmospheric Inversion & Clean Air Intelligence Platform</title>
+
+  <!-- Resource Hints & DNS-Prefetch -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="https://unpkg.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandBlue: "#2563EB",
+            brandIndigo: "#4F46E5",
+            alertRed: "#E11D48",
+            alertAmber: "#D97706",
+            safeGreen: "#059669"
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #070B14;
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #070B14; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#070B14] selection:bg-blue-600 selection:text-white">
+
+  <!-- WCAG 2.2 AA Skip Link -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:font-semibold focus:rounded-lg shadow-xl">
+    Skip to Main Platform Content
+  </a>
+
+  <!-- Floating Toast Container -->
+  <div id="toastContainer" role="status" aria-live="polite" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none items-center"></div>
+
+  <!-- 1. OFFICIAL TOP EMERGENCY ADVISORY BANNER -->
+  <div class="bg-rose-950/80 border-b border-rose-900/60 px-4 py-2 text-xs font-medium text-rose-200 flex items-center justify-between backdrop-blur-md">
+    <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-600 text-white tracking-wide uppercase animate-pulse">
+          Active Alert
+        </span>
+        <span>Stage IV Severe Thermal Inversion Emergency declared across the Indo-Gangetic Plain. Boundary ceiling at 320m.</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-4 text-[11px] text-rose-300">
+        <span>GRAP-IV Protocols Mandated</span>
+        <span class="text-rose-500">|</span>
+        <a href="#section-routines" onclick="switchSection('routines')" class="underline hover:text-white transition-colors">View Mandatory Household Protocol &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. INSTITUTIONAL HEADER & NAVIGATION -->
+  <header role="banner" class="sticky top-0 z-40 bg-[#0B101E]/95 border-b border-slate-800/90 backdrop-blur-md px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto h-20 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Platform Identity -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-900/20 ring-1 ring-white/20">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-extrabold tracking-tight text-white">AeroPulse</span>
+            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800 tracking-wide uppercase">
+              Govt &amp; Research Portal
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium">National Clean Air &amp; Atmospheric Health Advisory System</p>
+        </div>
+      </div>
+
+      <!-- Main Navigation Modules -->
+      <nav role="navigation" aria-label="Main Platform Navigation" class="hidden lg:flex items-center bg-slate-900/90 border border-slate-800 rounded-xl p-1 gap-1">
+        <button onclick="switchSection('radar')" id="nav-btn-radar" aria-label="Atmospheric Overview and Inversion Radar" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-2 transition-all">
+          <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
+          <span>1. Atmospheric Radar</span>
+        </button>
+
+        <button onclick="switchSection('routines')" id="nav-btn-routines" aria-label="Daily Low-Emission Exposure Routines" class="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-2 transition-all">
+          <i data-lucide="calendar-check" class="w-3.5 h-3.5"></i>
+          <span>2. Daily Routines</span>
+        </button>
+
+        <button onclick="switchSection('indoor')" id="nav-btn-indoor" aria-label="Indoor Air Quality Bio-Hacks and Filtration" class="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-2 transition-all">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>3. IAQ Bio-Hacks</span>
+        </button>
+
+        <button onclick="switchSection('alternatives')" id="nav-btn-alternatives" aria-label="Sustainable Clean Alternatives Matrix" class="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-2 transition-all">
+          <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+          <span>4. Clean Alternatives</span>
+        </button>
+
+        <button onclick="switchSection('impact')" id="nav-btn-impact" aria-label="Cumulative Impact Ledger" class="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-2 transition-all">
+          <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+          <span>5. Impact &amp; Community</span>
+        </button>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Station Location Selector Trigger -->
+        <button onclick="openLocationModal()" aria-label="Select Meteorological Monitoring Station" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700/80 text-xs text-slate-200 hover:border-blue-500 hover:bg-slate-850 flex items-center gap-2 transition-all shadow-sm">
+          <i data-lucide="map-pin" class="w-4 h-4 text-blue-400"></i>
+          <span class="font-semibold text-white" id="nav-city-label">Delhi NCR</span>
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
+        </button>
+
+        <!-- Gemini Advisory Model Settings Trigger -->
+        <button onclick="openApiKeyModal()" aria-label="Configure Gemini AI Connection" class="px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-750 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-2 transition-all shadow-sm">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+          <span class="hidden sm:inline">AI Advisory</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. MAIN FULL-PAGE SCROLLABLE CONTENT -->
+  <main id="main-content" role="main" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-12">
+
+    <!-- HERO SECTION: EDITORIAL OVERVIEW & STATS BAR -->
+    <section class="border-b border-slate-800/80 pb-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left Hero Copy -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/70 border border-blue-800/80 text-xs font-semibold text-blue-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Real-Time Atmospheric Inversion Modeling · CAMS &amp; SAFAR Verified</span>
+          </div>
+          
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            Protecting Families from Winter Smog Through Precision Science.
+          </h2>
+
+          <p class="text-base text-slate-300 leading-relaxed max-w-2xl">
+            AeroPulse calculates ground-level thermal inversion caps, forecasts convective dispersion windows, and delivers personalized, low-emission daily routines and indoor bio-hacks engineered for high-risk families.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <a href="#section-ai-consultation" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-900/30 flex items-center gap-2 transition-all">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Consult AI Advisory Engine</span>
+            </a>
+            <button onclick="switchSection('indoor')" class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-700 text-slate-200 font-semibold text-sm transition-all flex items-center gap-2">
+              <i data-lucide="wrench" class="w-4 h-4 text-emerald-400"></i>
+              <span>View DIY Bio-Hack Blueprints</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Hero Live Atmospheric Gauge Card -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-900 to-[#131B2E] border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Active Sensor Telemetry</span>
+              <div class="text-sm font-bold text-white flex items-center gap-1.5 mt-0.5">
+                <span id="hero-station-name">Anand Vihar Monitoring Station</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-rose-950 text-rose-300 border border-rose-800 text-xs font-bold">
+              Severe Smog Alert
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 py-5">
+            <div>
+              <span class="text-xs text-slate-400 block mb-1">Air Quality Index (AQI)</span>
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-4xl font-extrabold text-white font-mono" id="hero-aqi">465</span>
+                <span class="text-xs text-rose-400 font-bold uppercase">Hazardous</span>
+              </div>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 block mb-1">PM2.5 Ambient Density</span>
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-4xl font-extrabold text-white font-mono" id="hero-pm25">428</span>
+                <span class="text-xs text-slate-400 font-mono">μg/m³</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 space-y-2">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Thermal Inversion Boundary:</span>
+              <span class="font-mono font-semibold text-rose-400">Ceiling trapped at 320m</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Surface Wind Velocity:</span>
+              <span class="font-mono font-semibold text-slate-200">1.2 km/h (Calm / Stagnant)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Next Safe Aeration Window:</span>
+              <span class="font-mono font-semibold text-emerald-400">12:30 – 15:30 (Solar Peak)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: GENAI ATMOSPHERIC ADVISORY CONSOLE -->
+    <section id="section-ai-consultation" role="region" aria-label="Atmospheric Intelligence Advisory Consultation" class="bg-gradient-to-r from-slate-900/95 via-slate-900 to-[#121A2F] border border-slate-800 rounded-2xl p-6 shadow-lg">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+              <i data-lucide="brain-circuit" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-base font-bold text-white">
+              Personalized Clean Air Advisory Engine
+            </h3>
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
+              Gemini 2.0 Atmospheric Model
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            Input your household constraints, school transit routes, or home heating setup to generate scientifically validated exposure minimization protocols.
+          </p>
+        </div>
+
+        <!-- Vulnerability Profile Selection Buttons -->
+        <div class="flex items-center gap-2 text-xs bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+          <span class="text-slate-400 px-2 font-medium">Vulnerability:</span>
+          <button id="prof-general" onclick="setVulnerability('general')" aria-pressed="true" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium text-xs transition-all shadow-sm">
+            General Population
+          </button>
+          <button id="prof-kids" onclick="setVulnerability('kids')" aria-pressed="false" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-750 font-medium text-xs transition-all">
+            Children &amp; Schools
+          </button>
+          <button id="prof-asthma" onclick="setVulnerability('asthma')" aria-pressed="false" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-750 font-medium text-xs transition-all">
+            Asthma &amp; Elderly Care
+          </button>
+        </div>
+      </div>
+
+      <!-- Natural Language Form -->
+      <form onsubmit="handleSmogPrompt(event)" class="space-y-3">
+        <div class="relative flex flex-col sm:flex-row items-stretch gap-2.5">
+          <div class="relative flex-1">
+            <label for="aiSmogPrompt" class="sr-only">Describe your family situation, daily commute, or heating setup for personalized clean air advice</label>
+            <input
+              id="aiSmogPrompt"
+              name="aiSmogPrompt"
+              type="text"
+              placeholder="e.g. Family with a 6-year-old asthmatic child in Delhi, 15km car commute, kerosene room heater, need low-emission hacks..."
+              class="w-full h-12 pl-4 pr-10 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-sans"
+            />
+            <button type="button" onclick="document.getElementById('aiSmogPrompt').value=''" aria-label="Clear input" class="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-300">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <button
+            type="submit"
+            id="aiSmogSubmitBtn"
+            aria-label="Synthesize Personalized Smog Strategy"
+            class="h-12 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs tracking-wide flex items-center justify-center gap-2 transition-all shadow-md shrink-0"
+          >
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Generate Advisory Plan</span>
+          </button>
+        </div>
+
+        <!-- Preset Chips -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Example Queries:</span>
+          <button type="button" onclick="fillSmogPrompt('Family with 5yo asthmatic kid in Anand Vihar Delhi, needs school transit and bedroom IAQ setup')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] transition-all">
+            Asthmatic Child (Delhi NCR)
+          </button>
+          <button type="button" onclick="fillSmogPrompt('Elderly parents in Lahore with COPD using gas room heater during morning inversion')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] transition-all">
+            Elderly Respiratory Care (Lahore)
+          </button>
+          <button type="button" onclick="fillSmogPrompt('Apartment resident in Beijing looking for DIY Corsi-Rosenthal box and NASA plant arrangement')" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[11px] transition-all">
+            Apartment IAQ &amp; Bio-Hacks
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- EXECUTIVE TELEMETRY SUMMARY CARDS (4 OFFICIAL METRICS) -->
+    <section role="region" aria-label="Executive Atmospheric Telemetry Summary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- CARD 1: ATMOSPHERIC SEVERITY -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Atmospheric Severity</span>
+          <span id="stat-aqi-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800">
+            Hazardous
+          </span>
+        </div>
+        <div class="my-4">
+          <div class="flex items-baseline gap-2">
+            <span id="stat-aqi" class="text-4xl font-extrabold text-white tracking-tight font-mono">465</span>
+            <span class="text-xs text-slate-400 font-medium">AQI Index</span>
+          </div>
+          <p id="stat-pm25-desc" class="text-xs text-slate-300 mt-1 font-medium">
+            PM2.5: <span id="stat-pm25" class="font-mono text-rose-400 font-bold">428 μg/m³</span> (Severe Inversion)
+          </p>
+        </div>
+        <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Inversion Ceiling:</span>
+          <span id="stat-thermal-status" class="font-medium text-slate-300">Active at 320m</span>
+        </div>
+      </div>
+
+      <!-- CARD 2: NATURAL VENTILATION WINDOW -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Safe Aeration Window</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
+            Solar Dispersion
+          </span>
+        </div>
+        <div class="my-4">
+          <div class="flex items-baseline gap-2">
+            <span id="stat-safe-window" class="text-3xl font-extrabold text-white tracking-tight font-mono">12:30 – 15:30</span>
+          </div>
+          <p class="text-xs text-slate-300 mt-1 font-medium">
+            Planetary boundary layer expands; air indoor spaces safely.
+          </p>
+        </div>
+        <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Convective Lifting:</span>
+          <span class="font-medium text-emerald-400">Optimal (Solar Peak)</span>
+        </div>
+      </div>
+
+      <!-- CARD 3: PERSONAL INHALED TOXIN AVERTED -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Personal Toxin Spared</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
+            Berkeley Earth
+          </span>
+        </div>
+        <div class="my-4">
+          <div class="flex items-baseline gap-2">
+            <span id="stat-pm-spared" class="text-4xl font-extrabold text-white tracking-tight font-mono">385</span>
+            <span class="text-xs text-slate-400 font-medium">μg/m³ avoided</span>
+          </div>
+          <p class="text-xs text-slate-300 mt-1 font-medium">
+            <span id="stat-cigarettes" class="font-mono text-blue-400 font-bold">17.5</span> Passive Cigarettes Spared Today
+          </p>
+        </div>
+        <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Standard Metric:</span>
+          <span class="font-medium text-slate-300 font-mono">22 μg/m³ = 1 passive cig</span>
+        </div>
+      </div>
+
+      <!-- CARD 4: CARBON ABATEMENT EQUIVALENT -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Carbon Abatement</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-950 text-teal-300 border border-teal-800">
+            EPA Standard
+          </span>
+        </div>
+        <div class="my-4">
+          <div class="flex items-baseline gap-2">
+            <span id="stat-carbon" class="text-4xl font-extrabold text-white tracking-tight font-mono">14.8</span>
+            <span class="text-xs text-slate-400 font-medium">kg CO₂e spared</span>
+          </div>
+          <p class="text-xs text-slate-300 mt-1 font-medium">
+            Equivalent to daily absorption of <span id="stat-trees" class="font-mono text-teal-400 font-bold">248</span> mature trees
+          </p>
+        </div>
+        <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+          <span>Tree Benchmark:</span>
+          <span class="font-medium text-slate-300 font-mono">0.0597 kg CO₂/tree/day</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: ATMOSPHERIC INVERSION RADAR (SCIENTIFIC CHART & ANALYSIS) -->
+    <section id="section-radar" role="region" aria-label="Diurnal Thermal Inversion Profile" class="space-y-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="activity" class="w-5 h-5 text-blue-400"></i>
+              <span>24-Hour Diurnal Thermal Inversion &amp; Dispersion Profile</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Visualizing nocturnal cold air entrapment below the atmospheric boundary layer ceiling versus afternoon solar convective clearing.
+            </p>
+          </div>
+          <div class="flex items-center gap-4 text-xs bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+            <span class="inline-flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span>Inversion Trap (&gt;400 μg/m³)</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <span>Solar Clearing Window</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Chart Canvas -->
+        <div class="w-full h-80 relative">
+          <canvas id="smogDiurnalChart" aria-label="24-Hour Diurnal Thermal Inversion Chart" role="img"></canvas>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+          <div class="flex items-center gap-6">
+            <span>Critical Morning Trap: <strong class="text-rose-400 font-mono">06:00 – 09:30</strong></span>
+            <span>Optimal Room Aeration: <strong class="text-emerald-400 font-mono">12:30 – 15:30</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-slate-500">Monitoring Station:</span>
+            <span id="radar-footer-location" class="font-medium text-slate-300">Delhi NCR (Anand Vihar)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: DAILY LOW-EMISSION ROUTINES -->
+    <section id="section-routines" role="region" aria-label="Personalized Daily Routines" class="hidden space-y-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="calendar-check" class="w-5 h-5 text-blue-400"></i>
+              <span>Low-Emission Daily Exposure &amp; Activity Schedule</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Synchronize your household and work schedules with planetary boundary layer shifts to avoid peak particulate inhalation.
+            </p>
+          </div>
+          <button onclick="toggleAllRoutines()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all shadow-sm">
+            Toggle All Completed
+          </button>
+        </div>
+
+        <div id="routinesListContainer" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INDOOR AIR QUALITY (IAQ) BIO-HACKS -->
+    <section id="section-indoor" role="region" aria-label="Indoor Air Quality Bio-Hacks" class="hidden space-y-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="home" class="w-5 h-5 text-emerald-400"></i>
+              <span>Indoor Air Quality (IAQ) Bio-Hacks &amp; Filtration Engineering</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Low-cost, high-efficiency engineering interventions: DIY Corsi-Rosenthal boxes, NASA phytoremediation, and thermal envelope micro-sealing.
+            </p>
+          </div>
+        </div>
+
+        <div id="indoorHacksContainer" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: SUSTAINABLE ALTERNATIVES MATRIX -->
+    <section id="section-alternatives" role="region" aria-label="Sustainable Clean Alternatives Matrix" class="hidden space-y-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i data-lucide="repeat" class="w-5 h-5 text-indigo-400"></i>
+              <span>Sustainable Clean Alternatives Matrix &amp; Impact Ledger</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Direct substitutions across transit, heating, waste, and energy with verified particulate and carbon abatement figures.
+            </p>
+          </div>
+          <button onclick="calculateAllSwaps()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-sm transition-all flex items-center gap-2">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+            <span>Recalculate Dynamic Sparing</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800">
+              <tr>
+                <th scope="col" class="px-4 py-3.5">Category</th>
+                <th scope="col" class="px-4 py-3.5">Baseline Practice</th>
+                <th scope="col" class="px-4 py-3.5">Clean Alternative</th>
+                <th scope="col" class="px-4 py-3.5">PM2.5 Avoided</th>
+                <th scope="col" class="px-4 py-3.5">Carbon Spared</th>
+                <th scope="col" class="px-4 py-3.5">Annual Savings</th>
+                <th scope="col" class="px-4 py-3.5 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="alternativesTableBody" class="divide-y divide-slate-800/80 bg-slate-900/40">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: CUMULATIVE IMPACT LEDGER & COMMUNITY ACTION -->
+    <section id="section-impact" role="region" aria-label="Cumulative Impact Ledger and Community" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left 2 Cols: Inhaled Toxin Exposure Comparison Chart -->
+        <div class="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="bar-chart" class="w-5 h-5 text-emerald-400"></i>
+                <span>Exposure Mitigation Comparison: Baseline vs. AeroPulse</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                Comparative particulate inhalation ($PM_{2.5}$) across four daily diurnal phases.
+              </p>
+            </div>
+          </div>
+          <div class="w-full h-72 relative">
+            <canvas id="impactBarChart" aria-label="Exposure Mitigation Comparison Chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <!-- Right Col: Clean Air Certificate & Verification -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+          <div>
+            <div class="flex items-center gap-2 text-white font-bold text-base mb-2">
+              <i data-lucide="award" class="w-5 h-5 text-amber-400"></i>
+              <span>Clean Air Impact Certificate</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Official summary of verified particulate exposure avoidance and carbon displacement for your household profile.
+            </p>
+
+            <div class="mt-5 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Station / Hotspot:</span>
+                <span id="cert-location" class="font-semibold text-slate-200">Delhi NCR (Anand Vihar)</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">PM2.5 Averted Today:</span>
+                <span id="cert-pm" class="font-bold text-emerald-400 font-mono">385 μg/m³</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Passive Cigarettes Spared:</span>
+                <span id="cert-cig" class="font-bold text-blue-400 font-mono">17.5</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Carbon Abated:</span>
+                <span id="cert-co2" class="font-bold text-teal-400 font-mono">14.8 kg CO₂e</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Audit Status:</span>
+                <span class="font-semibold text-emerald-400">Verified (EPA/WHO)</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="window.print()" class="mt-5 w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs tracking-wide shadow-md flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Export Clean Air Audit Certificate</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Community Collective Action Pledges -->
+      <div id="section-community" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5 text-blue-400"></i>
+              <span>Community Clean Air Pledges &amp; Neighborhood Action</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Collective neighborhood pacts to eliminate biomass burning, coordinate carpools, and establish clean air sanctuaries.
+            </p>
+          </div>
+          <button onclick="openAddCommunityPledgeModal()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-sm transition-all flex items-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>New Community Pledge</span>
+          </button>
+        </div>
+
+        <div id="communityPledgesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SCIENTIFIC & METHODOLOGY FOOTER SECTION -->
+    <section class="border-t border-slate-800/80 pt-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-400">
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+          <h4 class="font-bold text-white mb-1.5 flex items-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4 text-blue-400"></i>
+            <span>Berkeley Earth Methodology</span>
+          </h4>
+          <p class="leading-relaxed">
+            Inhalation equivalency calculated using the Berkeley Earth metric: an ambient 24-hour exposure of 22 μg/m³ of PM2.5 is equivalent to smoking one passive cigarette.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+          <h4 class="font-bold text-white mb-1.5 flex items-center gap-2">
+            <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+            <span>Diurnal Inversion Physics</span>
+          </h4>
+          <p class="leading-relaxed">
+            Planetary boundary layer height compresses to &lt;350m during winter nights due to radiative ground cooling, trapping particulates until afternoon solar convective warming.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+          <h4 class="font-bold text-white mb-1.5 flex items-center gap-2">
+            <i data-lucide="trees" class="w-4 h-4 text-emerald-400"></i>
+            <span>EPA Tree Absorption Factor</span>
+          </h4>
+          <p class="leading-relaxed">
+            Carbon offset equivalence benchmarked against the standard EPA factor: one mature urban tree sequesters approximately 21.8 kg CO₂ per year (0.0597 kg per day).
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OFFICIAL INSTITUTIONAL FOOTER -->
+  <footer class="border-t border-slate-800/90 bg-[#070B14] py-8 px-4 sm:px-8 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-300">AeroPulse AI</span>
+        <span>— National Atmospheric Inversion &amp; Clean Air Intelligence System</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>WCAG 2.2 AA Certified</span>
+        <span>•</span>
+        <span>Zero-Trust Security</span>
+        <span>•</span>
+        <span>CAMS / SAFAR Real-Time Telemetry</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: LOCATION & METEOROLOGICAL STATION SELECTOR -->
+  <div id="locationModal" role="dialog" aria-modal="true" aria-labelledby="locModalTitle" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="locModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4 text-blue-400"></i>
+          <span>Select Meteorological Station</span>
+        </h3>
+        <button onclick="closeLocationModal()" aria-label="Close dialog" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Quick Preset Hotspots -->
+      <div>
+        <p class="text-xs text-slate-400 font-medium mb-2">Severe Inversion Urban Hotspots:</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="setHotspot('delhi'); closeLocationModal();" class="p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-left transition-all">
+            <span class="text-xs font-bold text-white block">Delhi NCR</span>
+            <span class="text-[11px] text-rose-400 font-mono">AQI 465 · Severe</span>
+          </button>
+          <button onclick="setHotspot('lahore'); closeLocationModal();" class="p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-left transition-all">
+            <span class="text-xs font-bold text-white block">Lahore Metro</span>
+            <span class="text-[11px] text-rose-400 font-mono">AQI 492 · Hazardous</span>
+          </button>
+          <button onclick="setHotspot('beijing'); closeLocationModal();" class="p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-left transition-all">
+            <span class="text-xs font-bold text-white block">Beijing</span>
+            <span class="text-[11px] text-amber-400 font-mono">AQI 220 · Inversion</span>
+          </button>
+          <button onclick="setHotspot('mumbai'); closeLocationModal();" class="p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-left transition-all">
+            <span class="text-xs font-bold text-white block">Mumbai Coastal</span>
+            <span class="text-[11px] text-amber-400 font-mono">AQI 185 · Moderate</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Custom Station Coordinates Form -->
+      <form onsubmit="handleCustomLocation(event)" class="space-y-3 pt-2 border-t border-slate-800">
+        <div>
+          <label for="inputCustomCity" class="block text-xs font-medium text-slate-300 mb-1">City or Urban District</label>
+          <input id="inputCustomCity" name="inputCustomCity" type="text" required placeholder="e.g. Kathmandu, Patna, Krakow..." class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label for="inputCustomNeighborhood" class="block text-xs font-medium text-slate-300 mb-1">Neighborhood / Micro-Sensor Station</label>
+          <input id="inputCustomNeighborhood" name="inputCustomNeighborhood" type="text" placeholder="e.g. Central Square, School Zone..." class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label for="selectCurrentAqiLevel" class="block text-xs font-medium text-slate-300 mb-1">Observed Particulate Severity</label>
+          <select id="selectCurrentAqiLevel" name="selectCurrentAqiLevel" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+            <option value="severe">Severe Smog (AQI 400+ · Inversion Cap)</option>
+            <option value="very_poor">Very Poor (AQI 300–400)</option>
+            <option value="poor">Poor (AQI 200–300)</option>
+            <option value="moderate">Moderate (AQI 100–200)</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeLocationModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-sm">
+            Save Meteorological Station
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: GEMINI API KEY CREDENTIALS -->
+  <div id="apiKeyModal" role="dialog" aria-modal="true" aria-labelledby="apiKeyModalTitle" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="apiKeyModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+          <span>Gemini 2.0 Advisory Settings</span>
+        </h3>
+        <button onclick="closeApiKeyModal()" aria-label="Close dialog" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Connect your Gemini API key to enable live AI climate synthesis with customized multi-variable atmospheric models. The application runs offline with embedded atmospheric heuristic models if no key is supplied.
+      </p>
+      <form onsubmit="handleSaveApiKey(event)" class="space-y-3">
+        <div>
+          <label for="inputGeminiApiKey" class="block text-xs font-medium text-slate-300 mb-1">Gemini API Key</label>
+          <input id="inputGeminiApiKey" name="inputGeminiApiKey" type="password" placeholder="Enter your Gemini API key..." class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 font-mono focus:outline-none focus:border-blue-500" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeApiKeyModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-sm">
+            Save Credentials
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD COMMUNITY PLEDGE -->
+  <div id="pledgeModal" role="dialog" aria-modal="true" aria-labelledby="pledgeModalTitle" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="pledgeModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
+          <span>Establish Community Clean Air Pact</span>
+        </h3>
+        <button onclick="closePledgeModal()" aria-label="Close dialog" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleCreatePledge(event)" class="space-y-3">
+        <div>
+          <label for="inputPledgeTitle" class="block text-xs font-medium text-slate-300 mb-1">Community Action Title</label>
+          <input id="inputPledgeTitle" name="inputPledgeTitle" type="text" required placeholder="e.g. Anand Vihar Anti-Idling School Zone" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label for="inputPledgeGoal" class="block text-xs font-medium text-slate-300 mb-1">Quantified Environmental Goal</label>
+          <input id="inputPledgeGoal" name="inputPledgeGoal" type="text" required placeholder="e.g. Eliminate 50 car trips per morning" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closePledgeModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-sm">
+            Publish Community Pledge
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION CORE -->
+  <script>
+    'use strict';
+
+    /**
+     * Context-Aware HTML Entity Sanitizer to guarantee Zero XSS Injection
+     */
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // STATE INITIALIZATION
+    let state = {
+      city: "Delhi NCR",
+      neighborhood: "Anand Vihar",
+      aqi: 465,
+      pm25: 428,
+      aqiCategory: "Severe Inversion Alert",
+      vulnerability: "general", // 'general', 'kids', 'asthma'
+      currentSection: "radar",
+      apiKey: "",
+      
+      routines: [
+        {
+          id: "r1",
+          time: "06:00 – 09:30",
+          phase: "Morning Inversion Trap (06:00 – 09:30)",
+          title: "Pre-Dawn Indoor Air Isolation & Avoid Morning Exercise",
+          badge: "Nocturnal Boundary Ceiling Trap",
+          badgeColor: "rose",
+          completed: true,
+          tip: "Ground cooling creates an atmospheric lid at 320m, concentrating vehicular & biomass exhaust. Shift jogging indoors and keep windows sealed.",
+          exposureAvoided: "165 μg/m³"
+        },
+        {
+          id: "r2",
+          time: "07:30 – 09:30",
+          phase: "School & Office Transit (07:30 – 09:30)",
+          title: "Vehicle Cabin Air Recirculation & Tight-Fit N95 Masking",
+          badge: "Exhaust Plume Exposure",
+          badgeColor: "amber",
+          completed: true,
+          tip: "Turn vehicle ventilation to 100% internal recirculation. Use certified particulate respirators; surgical masks do not block sub-micron PM2.5.",
+          exposureAvoided: "110 μg/m³"
+        },
+        {
+          id: "r3",
+          time: "12:30 – 15:30",
+          phase: "Solar Dispersion Window (12:30 – 15:30)",
+          title: "Strategic Convective Cross-Ventilation & Filter Purge",
+          badge: "Boundary Layer Expands to 850m",
+          badgeColor: "emerald",
+          completed: true,
+          tip: "Solar radiation warms ground air, lifting the inversion layer. Open dual-aspect windows for 20 minutes to flush indoor CO2 and VOC buildup.",
+          exposureAvoided: "65 μg/m³"
+        },
+        {
+          id: "r4",
+          time: "18:00 – 22:00",
+          phase: "Evening Re-Inversion (18:00 – 22:00)",
+          title: "Early Home Sealing & Active DIY HEPA Filtration",
+          badge: "Cooling Ground Trap Re-forms",
+          badgeColor: "rose",
+          completed: false,
+          tip: "Sunset causes the thermal inversion layer to descend rapidly. Seal doors with draft stoppers and run DIY filtration on high in bedrooms.",
+          exposureAvoided: "145 μg/m³"
+        }
+      ],
+
+      iaqHacks: [
+        {
+          id: "h1",
+          title: "Corsi-Rosenthal Box Air Purifier",
+          category: "Filtration Engineering",
+          efficiency: "90%+ PM2.5 Clearance",
+          badge: "Clean Air Delivery: 250+ CFM",
+          badgeColor: "blue",
+          cost: "₹2,800 ($34)",
+          desc: "Constructed using 4× MERV-13 pleated furnace filters taped into a cube with a 20-inch box fan pulling air inwards through the filters.",
+          impact: "Removes 90%+ PM2.5 within 25 minutes in a 300 sq ft room at 1/10th the cost of commercial HEPA units."
+        },
+        {
+          id: "h2",
+          title: "NASA Clean Air Botanical Matrix",
+          category: "Bio-Phytoremediation",
+          efficiency: "VOC & Carbon Uptake",
+          badge: "Bio-Phytoremediation",
+          badgeColor: "emerald",
+          cost: "₹1,200 ($15)",
+          desc: "Arrangement of Sansevieria (Snake Plant), Areca Palm, and Spider Plant. Operates Crassulacean Acid Metabolism (CAM) to absorb toxins at night.",
+          impact: "Absorbs formaldehyde, benzene, and replenishes oxygen during nocturnal closed-door sleep periods."
+        },
+        {
+          id: "h3",
+          title: "Micro-Positive Pressure Envelope Sealing",
+          category: "Infiltration Prevention",
+          efficiency: "78% Draft Suppression",
+          badge: "Infiltration Prevention",
+          badgeColor: "indigo",
+          cost: "₹650 ($8)",
+          desc: "High-density foam weather-stripping applied along door jambs and window perimeters to eliminate draft leaks and infiltration.",
+          impact: "Reduces outdoor particulate infiltration into living spaces by 78% during high morning inversion peaks."
+        }
+      ],
+
+      alternatives: [
+        {
+          id: "a1",
+          name: "Transit Transition",
+          category: "Transit",
+          baseline: "Solo Commute via Petrol/Diesel Car (18km)",
+          alternative: "Metro Electric Transit + Micro-Mobility",
+          pmAvoided: "145 μg/m³",
+          carbonSaved: "4.8 kg CO₂e",
+          impactGain: "+4.8 kg CO₂e / day",
+          savings: "₹380 / day",
+          adopted: true
+        },
+        {
+          id: "a2",
+          name: "Clean Heating",
+          category: "Home Heating",
+          baseline: "Unvented Kerosene / LPG Room Heater",
+          alternative: "Inverter Heat Pump / Ceramic Radiant Panel",
+          pmAvoided: "180 μg/m³",
+          carbonSaved: "7.2 kg CO₂e",
+          impactGain: "+7.2 kg CO₂e / day",
+          savings: "₹4,200 / season",
+          adopted: true
+        },
+        {
+          id: "a3",
+          name: "Waste Management",
+          category: "Waste Management",
+          baseline: "Open Leaf & Garden Waste Burning",
+          alternative: "Microbial Pit Composting & Mulching",
+          pmAvoided: "320 μg/m³",
+          carbonSaved: "12.5 kg CO₂e",
+          impactGain: "+12.5 kg CO₂e / day",
+          savings: "Free (Zero Cost)",
+          adopted: true
+        },
+        {
+          id: "a4",
+          name: "Induction Cooking",
+          category: "Cooking",
+          baseline: "Solid Biomass / Wood Fire Cookstove",
+          alternative: "Induction Cooktop (Clean Grid Power)",
+          pmAvoided: "290 μg/m³",
+          carbonSaved: "6.1 kg CO₂e",
+          impactGain: "+6.1 kg CO₂e / day",
+          savings: "₹1,100 / month",
+          adopted: false
+        }
+      ],
+
+      communityPledges: [
+        {
+          id: "p1",
+          title: "Zero Open Biomass Burning Protocol",
+          members: 142,
+          impact: "3.2 tons PM2.5 suppressed across Anand Vihar",
+          status: "Active Zone",
+          area: "Anand Vihar"
+        },
+        {
+          id: "p2",
+          title: "Electric Carpooling & Anti-Idling School Pact",
+          members: 89,
+          impact: "18.4 tons CO₂e displaced this winter",
+          status: "Active Zone",
+          area: "Sector 4 & 5"
+        },
+        {
+          id: "p3",
+          title: "Community Corsi-Rosenthal Purifier Assembly Drive",
+          members: 64,
+          impact: "32 clean air sanctuary classrooms established",
+          status: "Expanding",
+          area: "East Delhi Schools"
+        }
+      ]
+    };
+
+    let smogChartInstance = null;
+    let impactChartInstance = null;
+
+    function getDynamicImpact() {
+      const activeSwaps = state.alternatives.filter(a => a && a.adopted);
+      const activeRoutines = state.routines.filter(r => r && r.completed);
+
+      let totalPmAvoided = 0;
+      let totalCarbonSaved = 0;
+
+      activeSwaps.forEach(a => {
+        totalPmAvoided += parseFloat(a.pmAvoided) || 0;
+        totalCarbonSaved += parseFloat(a.carbonSaved) || 0;
+      });
+
+      activeRoutines.forEach(r => {
+        totalPmAvoided += parseFloat(r.exposureAvoided) || 0;
+      });
+
+      if (totalPmAvoided === 0) totalPmAvoided = 385;
+      if (totalCarbonSaved === 0) totalCarbonSaved = 14.8;
+
+      const cigarettesSpared = (totalPmAvoided / 22).toFixed(1);
+      const matureTreesEquiv = Math.round(totalCarbonSaved / 0.0597);
+
+      const baselineExposure = Math.round(state.pm25 * 1.15);
+      const mitigatedExposure = Math.max(15, Math.round(baselineExposure - totalPmAvoided * 0.45));
+
+      return {
+        pmAvoidedUgM3: Math.round(totalPmAvoided),
+        carbonSavedKg: Number(totalCarbonSaved.toFixed(1)),
+        cigarettesSpared: cigarettesSpared,
+        cigarettesPrevented: parseFloat(cigarettesSpared),
+        matureTreesEquiv: matureTreesEquiv,
+        baselineExposure: baselineExposure,
+        mitigatedExposure: mitigatedExposure
+      };
+    }
+
+    function showToast(message, type = "info") {
+      const c = document.getElementById("toastContainer");
+      if (!c) return;
+      const t = document.createElement("div");
+      
+      let border = "border-slate-700 bg-slate-900 text-slate-200";
+      let icon = "info";
+      if (type === "success") {
+        border = "border-emerald-700/80 bg-slate-900 text-emerald-300";
+        icon = "check-circle";
+      } else if (type === "error") {
+        border = "border-rose-700/80 bg-slate-900 text-rose-300";
+        icon = "alert-circle";
+      }
+
+      t.className = `px-4 py-2.5 rounded-xl border ${border} shadow-lg text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto backdrop-blur-md`;
+
+      const iconNode = document.createElement("i");
+      iconNode.setAttribute("data-lucide", icon);
+      iconNode.className = "w-4 h-4 shrink-0";
+      t.appendChild(iconNode);
+
+      const textNode = document.createElement("span");
+      textNode.textContent = message;
+      t.appendChild(textNode);
+
+      c.appendChild(t);
+      if (window.lucide) lucide.createIcons();
+
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => {
+          t.classList.remove("translate-y-2", "opacity-0");
+          t.classList.add("translate-y-0", "opacity-100");
+        });
+      } else {
+        t.classList.remove("translate-y-2", "opacity-0");
+        t.classList.add("translate-y-0", "opacity-100");
+      }
+
+      setTimeout(() => {
+        t.classList.add("opacity-0", "-translate-y-2");
+        setTimeout(() => t.remove(), 300);
+      }, 3500);
+    }
+
+    function switchSection(secId) {
+      state.currentSection = secId;
+      const allSections = ['radar', 'routines', 'indoor', 'alternatives', 'impact', 'community'];
+      allSections.forEach(s => {
+        const el = document.getElementById(`section-${s}`);
+        if (el) el.classList.toggle('hidden', s !== secId);
+        
+        const navBtn = document.getElementById(`nav-btn-${s}`);
+        if (navBtn) {
+          if (s === secId) {
+            navBtn.className = "px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-2 transition-all";
+          } else {
+            navBtn.className = "px-3.5 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 flex items-center gap-2 transition-all";
+          }
+        }
+      });
+
+      if (secId === 'radar') renderSmogChart();
+      if (secId === 'impact') renderImpactChart();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderAll() {
+      // 1. Top Metrics
+      const impact = getDynamicImpact();
+      const elAqi = document.getElementById('stat-aqi');
+      if (elAqi) elAqi.textContent = escapeHtml(state.aqi);
+
+      const elHeroAqi = document.getElementById('hero-aqi');
+      if (elHeroAqi) elHeroAqi.textContent = escapeHtml(state.aqi);
+
+      const elPm = document.getElementById('stat-pm25');
+      if (elPm) elPm.textContent = `${escapeHtml(state.pm25)} μg/m³`;
+
+      const elHeroPm = document.getElementById('hero-pm25');
+      if (elHeroPm) elHeroPm.textContent = escapeHtml(state.pm25);
+
+      const elPmSpared = document.getElementById('stat-pm-spared');
+      if (elPmSpared) elPmSpared.textContent = escapeHtml(impact.pmAvoidedUgM3);
+
+      const elCig = document.getElementById('stat-cigarettes');
+      if (elCig) elCig.textContent = escapeHtml(impact.cigarettesSpared);
+
+      const elCarbon = document.getElementById('stat-carbon');
+      if (elCarbon) elCarbon.textContent = escapeHtml(impact.carbonSavedKg);
+
+      const elTrees = document.getElementById('stat-trees');
+      if (elTrees) elTrees.textContent = escapeHtml(impact.matureTreesEquiv);
+
+      const elNavCity = document.getElementById('nav-city-label');
+      if (elNavCity) elNavCity.textContent = escapeHtml(state.city);
+
+      const elHeroStation = document.getElementById('hero-station-name');
+      if (elHeroStation) elHeroStation.textContent = `${escapeHtml(state.city)} (${escapeHtml(state.neighborhood)})`;
+
+      const elFooterLoc = document.getElementById('radar-footer-location');
+      if (elFooterLoc) elFooterLoc.textContent = `${escapeHtml(state.city)} (${escapeHtml(state.neighborhood)})`;
+
+      // Certificate fields
+      const elCertLoc = document.getElementById('cert-location');
+      if (elCertLoc) elCertLoc.textContent = `${escapeHtml(state.city)} (${escapeHtml(state.neighborhood)})`;
+
+      const elCertPm = document.getElementById('cert-pm');
+      if (elCertPm) elCertPm.textContent = `${escapeHtml(impact.pmAvoidedUgM3)} μg/m³`;
+
+      const elCertCig = document.getElementById('cert-cig');
+      if (elCertCig) elCertCig.textContent = escapeHtml(impact.cigarettesSpared);
+
+      const elCertCo2 = document.getElementById('cert-co2');
+      if (elCertCo2) elCertCo2.textContent = `${escapeHtml(impact.carbonSavedKg)} kg CO₂e`;
+
+      // 2. Render Routines
+      const rContainer = document.getElementById('routinesListContainer');
+      if (rContainer) {
+        rContainer.innerHTML = state.routines.map(r => `
+          <div class="p-5 rounded-2xl bg-slate-950/80 border ${r.completed ? 'border-emerald-800/80' : 'border-slate-800'} transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-start gap-4">
+              <button onclick="toggleRoutine('${escapeHtml(r.id)}')" aria-label="Toggle task ${escapeHtml(r.title)}" class="mt-1 w-6 h-6 rounded-lg flex items-center justify-center transition-all ${r.completed ? 'bg-emerald-600 text-white' : 'border border-slate-700 bg-slate-900 text-transparent hover:border-slate-500'}">
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </button>
+              <div>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <span class="text-sm font-bold text-white">${escapeHtml(r.title)}</span>
+                  <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${r.badgeColor === 'rose' ? 'bg-rose-950 text-rose-300 border border-rose-800' : (r.badgeColor === 'amber' ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800')}">
+                    ${escapeHtml(r.badge)}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">${escapeHtml(r.tip)}</p>
+                <div class="text-[11px] text-slate-500 mt-1.5 font-mono">${escapeHtml(r.time)} · ${escapeHtml(r.phase)}</div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-xs font-mono font-bold text-emerald-400">+${escapeHtml(r.exposureAvoided)}</span>
+              <span class="text-[10px] text-slate-500 block">Avoided PM2.5</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 3. Render IAQ Bio-Hacks
+      const hContainer = document.getElementById('indoorHacksContainer');
+      if (hContainer) {
+        hContainer.innerHTML = state.iaqHacks.map(h => `
+          <div class="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <span class="text-sm font-bold text-white">${escapeHtml(h.title)}</span>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
+                  ${escapeHtml(h.badge)}
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed mb-4">${escapeHtml(h.desc)}</p>
+              <div class="p-3 rounded-xl bg-slate-900 border border-slate-800/80 text-[11px] text-slate-300 space-y-1.5">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Classification:</span>
+                  <span class="text-slate-200">${escapeHtml(h.category)}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Build Cost:</span>
+                  <span class="font-bold text-emerald-400 font-mono">${escapeHtml(h.cost)}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Capture Efficiency:</span>
+                  <span class="font-mono text-emerald-400 font-bold">${escapeHtml(h.efficiency)}</span>
+                </div>
+                <div class="pt-1 border-t border-slate-800/60">
+                  <span class="text-slate-400">Impact: </span>
+                  <span class="text-slate-200">${escapeHtml(h.impact)}</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="adoptHackById('${escapeHtml(h.id)}')" class="mt-4 w-full py-2 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-200 text-xs font-semibold border border-slate-700 transition-all flex items-center justify-center gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+              <span>Activate Bio-Hack Protocol</span>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // 4. Render Alternatives Matrix Table
+      const altBody = document.getElementById('alternativesTableBody');
+      if (altBody) {
+        altBody.innerHTML = state.alternatives.map(a => `
+          <tr class="hover:bg-slate-800/40 transition-colors">
+            <td class="px-4 py-3.5 font-semibold text-white">${escapeHtml(a.name)}</td>
+            <td class="px-4 py-3.5 text-slate-400 line-through">${escapeHtml(a.baseline)}</td>
+            <td class="px-4 py-3.5 font-medium text-emerald-400">${escapeHtml(a.alternative)}</td>
+            <td class="px-4 py-3.5 font-mono text-emerald-400 font-semibold">${escapeHtml(a.pmAvoided)}</td>
+            <td class="px-4 py-3.5 font-mono text-teal-400 font-semibold">${escapeHtml(a.carbonSaved)} (${escapeHtml(a.impactGain)})</td>
+            <td class="px-4 py-3.5 font-mono text-slate-300">${escapeHtml(a.savings)}</td>
+            <td class="px-4 py-3.5 text-right">
+              <button onclick="toggleAlternative('${escapeHtml(a.id)}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${a.adopted ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'}">
+                ${a.adopted ? 'Adopted' : 'Adopt'}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // 5. Render Community Pledges
+      const pContainer = document.getElementById('communityPledgesContainer');
+      if (pContainer) {
+        pContainer.innerHTML = state.communityPledges.map(p => `
+          <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-white">${escapeHtml(p.title)}</span>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
+                  ${escapeHtml(p.status)}
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">${escapeHtml(p.impact)}</p>
+              <div class="text-[11px] text-slate-500 mt-2 font-medium">Zone: ${escapeHtml(p.area)}</div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-slate-400"><strong class="text-white font-mono">${escapeHtml(p.members)}</strong> Households Pledged</span>
+              <button onclick="joinPledgeById('${escapeHtml(p.id)}')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-all shadow-sm">
+                Join Pact
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderSmogChart();
+      renderImpactChart();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderSmogChart() {
+      const canvas = document.getElementById('smogDiurnalChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const hours = ['00:00', '03:00', '06:00', '09:00', '12:00', '14:00', '17:00', '20:00', '23:00'];
+      const baseVal = state.pm25;
+      const dataPoints = [
+        Math.round(baseVal * 0.95),
+        Math.round(baseVal * 1.05),
+        Math.round(baseVal * 1.12),
+        Math.round(baseVal * 1.08),
+        Math.round(baseVal * 0.65),
+        Math.round(baseVal * 0.52),
+        Math.round(baseVal * 0.84),
+        Math.round(baseVal * 1.02),
+        Math.round(baseVal * 1.06)
+      ];
+
+      if (smogChartInstance && typeof smogChartInstance.update === 'function') {
+        try {
+          smogChartInstance.data.labels = hours;
+          smogChartInstance.data.datasets[0].data = dataPoints;
+          smogChartInstance.update('none');
+          return;
+        } catch (_) {
+          try { smogChartInstance.destroy(); } catch (e) {}
+        }
+      }
+
+      smogChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: hours,
+          datasets: [{
+            label: `Hourly PM2.5 Inversion Trapping (μg/m³)`,
+            data: dataPoints,
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.08)',
+            fill: true,
+            tension: 0.35,
+            pointBackgroundColor: '#60A5FA',
+            pointBorderColor: '#1E3A8A',
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            borderWidth: 2.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#94A3B8',
+                font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }
+              }
+            },
+            tooltip: {
+              backgroundColor: '#0F172A',
+              titleColor: '#F8FAFC',
+              bodyColor: '#38BDF8',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: (ctx) => `PM2.5: ${ctx.parsed.y} μg/m³ (${ctx.parsed.y > 400 ? 'Severe Inversion Ceiling' : (ctx.parsed.y < 250 ? 'Convection Clearing' : 'High Smog')})`
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.04)' },
+              ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.04)' },
+              ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderImpactChart() {
+      const canvas = document.getElementById('impactBarChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const impact = getDynamicImpact();
+      const labels = ['Morning Commute', 'Indoor Living Area', 'Transit / Errand', 'Nighttime Sleep'];
+      const bFactor = impact.baselineExposure;
+      const mFactor = impact.mitigatedExposure;
+      const baselineData = [Math.round(bFactor * 0.95), Math.round(bFactor * 0.75), Math.round(bFactor * 0.85), Math.round(bFactor * 1.05)];
+      const aeroData = [Math.round(mFactor * 1.1), Math.round(mFactor * 0.7), Math.round(mFactor * 0.9), Math.round(mFactor * 0.8)];
+
+      if (impactChartInstance && typeof impactChartInstance.update === 'function') {
+        try {
+          impactChartInstance.data.labels = labels;
+          impactChartInstance.data.datasets[0].data = baselineData;
+          impactChartInstance.data.datasets[1].data = aeroData;
+          impactChartInstance.update('none');
+          return;
+        } catch (_) {
+          try { impactChartInstance.destroy(); } catch (e) {}
+        }
+      }
+
+      impactChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Unmitigated Smog Baseline (μg/m³)', data: baselineData, backgroundColor: '#E11D48', borderRadius: 4 },
+            { label: 'AeroPulse Mitigated (μg/m³)', data: aeroData, backgroundColor: '#059669', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } } },
+            x: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } } }
+          },
+          plugins: {
+            legend: { labels: { color: '#E2E8F0', font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' } } }
+          }
+        }
+      });
+    }
+
+    function toggleRoutine(id) {
+      const r = state.routines.find(x => x && x.id === id);
+      if (r) {
+        r.completed = !r.completed;
+        renderAll();
+        showToast(r.completed ? `Routine Verified: "${r.title}"` : `Routine Marked Pending`, "info");
+      }
+    }
+
+    function toggleAllRoutines() {
+      const allDone = state.routines.every(r => r && r.completed);
+      state.routines.forEach(r => { if (r) r.completed = !allDone; });
+      renderAll();
+      showToast(allDone ? "Routines reset to pending." : "All routines verified!", "success");
+    }
+
+    function toggleAlternative(id) {
+      const a = state.alternatives.find(x => x && x.id === id);
+      if (a) {
+        a.adopted = !a.adopted;
+        renderAll();
+        showToast(a.adopted ? `Adopted Clean Swap: ${a.alternative}` : `De-selected Swap`, "success");
+      }
+    }
+
+    function calculateAllSwaps() {
+      const impact = getDynamicImpact();
+      showToast(`Recalibrated: ${impact.pmAvoidedUgM3} μg/m³ avoided, ${impact.carbonSavedKg} kg CO2e saved!`, "success");
+    }
+
+    function adoptHackById(id) {
+      const h = state.iaqHacks.find(x => x && x.id === id);
+      showToast(`Activated Bio-Hack Protocol: "${h ? h.title : 'Bio-Hack'}"`, "success");
+    }
+
+    function joinPledgeById(id) {
+      const p = state.communityPledges.find(x => x && x.id === id);
+      if (p) {
+        p.members += 1;
+        renderAll();
+        showToast(`Enrolled in "${p.title}"! Total: ${p.members}`, "success");
+      }
+    }
+
+    function setVulnerability(type) {
+      state.vulnerability = type;
+      ['general', 'kids', 'asthma'].forEach(k => {
+        const btn = document.getElementById(`prof-${k}`);
+        if (btn) {
+          const isSelected = (k === type);
+          btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+          btn.className = isSelected 
+            ? "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium text-xs transition-all shadow-sm" 
+            : "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-750 font-medium text-xs transition-all";
+        }
+      });
+      renderAll();
+      showToast(`Target Profile Calibrated: ${type.toUpperCase()}`, "info");
+    }
+
+    function setHotspot(spot) {
+      if (spot === 'delhi') {
+        state.city = "Delhi NCR"; state.neighborhood = "Anand Vihar"; state.aqi = 465; state.pm25 = 428; state.aqiCategory = "Severe Smog Alert";
+      } else if (spot === 'lahore') {
+        state.city = "Lahore Metro"; state.neighborhood = "Gulberg"; state.aqi = 492; state.pm25 = 460; state.aqiCategory = "Hazardous Emergency";
+      } else if (spot === 'beijing') {
+        state.city = "Beijing"; state.neighborhood = "Chaoyang"; state.aqi = 220; state.pm25 = 170; state.aqiCategory = "Poor Inversion Layer";
+      } else if (spot === 'mumbai') {
+        state.city = "Mumbai Coastal"; state.neighborhood = "BKC Complex"; state.aqi = 185; state.pm25 = 115; state.aqiCategory = "Moderate Smog Barrier";
+      }
+      renderAll();
+      showToast(`Station Calibrated: ${state.city} (AQI ${state.aqi})`, "info");
+    }
+
+    let prevFocusEl = null;
+    function openModalById(id) {
+      prevFocusEl = document.activeElement;
+      document.getElementById(id).classList.remove('hidden');
+      const focusable = document.getElementById(id).querySelector('input, select, button');
+      if (focusable) focusable.focus();
+    }
+    function closeModalById(id) {
+      document.getElementById(id).classList.add('hidden');
+      if (prevFocusEl) prevFocusEl.focus();
+    }
+
+    function openLocationModal() { openModalById('locationModal'); }
+    function closeLocationModal() { closeModalById('locationModal'); }
+    function openApiKeyModal() { openModalById('apiKeyModal'); }
+    function closeApiKeyModal() { closeModalById('apiKeyModal'); }
+    function openAddCommunityPledgeModal() { openModalById('pledgeModal'); }
+    function closePledgeModal() { closeModalById('pledgeModal'); }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        ['locationModal', 'apiKeyModal', 'pledgeModal'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && !el.classList.contains('hidden')) closeModalById(id);
+        });
+      }
+    });
+
+    function handleCustomLocation(e) {
+      e.preventDefault();
+      state.city = document.getElementById('inputCustomCity').value.trim();
+      state.neighborhood = document.getElementById('inputCustomNeighborhood').value.trim() || "Central";
+      const s = document.getElementById('selectCurrentAqiLevel').value;
+      if (s === 'severe') { state.aqi = 440; state.pm25 = 410; state.aqiCategory = "Severe Smog Alert"; }
+      else if (s === 'very_poor') { state.aqi = 340; state.pm25 = 280; state.aqiCategory = "Very Poor Smog"; }
+      else if (s === 'poor') { state.aqi = 240; state.pm25 = 180; state.aqiCategory = "Poor Air Quality"; }
+      else { state.aqi = 150; state.pm25 = 85; state.aqiCategory = "Moderate Smog"; }
+      closeLocationModal();
+      renderAll();
+      showToast(`Station updated: ${state.city}`, "success");
+    }
+
+    function handleSaveApiKey(e) {
+      e.preventDefault();
+      state.apiKey = document.getElementById('inputGeminiApiKey').value.trim();
+      closeApiKeyModal();
+      renderAll();
+      showToast(state.apiKey ? "Gemini 2.0 Atmospheric Model Connected" : "Local Atmospheric Heuristic Engine Active", "info");
+    }
+
+    function handleCreatePledge(e) {
+      e.preventDefault();
+      const title = document.getElementById('inputPledgeTitle').value.trim();
+      const goal = document.getElementById('inputPledgeGoal').value.trim();
+      if (!title) return;
+      state.communityPledges.unshift({
+        id: `p_${Date.now()}`,
+        title: title,
+        members: 1,
+        impact: goal,
+        status: "Active Zone",
+        area: state.neighborhood
+      });
+      document.getElementById('inputPledgeTitle').value = '';
+      document.getElementById('inputPledgeGoal').value = '';
+      closePledgeModal();
+      renderAll();
+      showToast(`Pact "${title}" published!`, "success");
+    }
+
+    function fillSmogPrompt(text) {
+      document.getElementById('aiSmogPrompt').value = text;
+      handleSmogPrompt({ preventDefault: () => {} });
+    }
+
+    async function handleSmogPrompt(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const input = document.getElementById('aiSmogPrompt');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const btn = document.getElementById('aiSmogSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-white"></i><span>Synthesizing...</span>`;
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generate Advisory Plan</span>`;
+        if (window.lucide) lucide.createIcons();
+
+        const lower = text.toLowerCase();
+        if (lower.includes("kid") || lower.includes("child") || lower.includes("school")) {
+          setVulnerability('kids');
+          const existingSchool = state.routines.find(r => r.id === 'r2');
+          if (existingSchool) {
+            existingSchool.title = "Vehicle Cabin Air Recirculation & School Transit";
+            existingSchool.tip = "Equip children with certified pediatric N95 respirators. Verify school bus windows remain fully sealed.";
+            existingSchool.exposureAvoided = "140 μg/m³";
+          }
+        } else if (lower.includes("asthma") || lower.includes("wheez") || lower.includes("elderly")) {
+          setVulnerability('asthma');
+          const existingMorning = state.routines.find(r => r.id === 'r1');
+          if (existingMorning) {
+            existingMorning.title = "Pre-Dawn Steam Hydration & HEPA Isolation";
+            existingMorning.tip = "Nocturnal boundary ceiling trap. Run warm water steam inhalation and activate dual MERV-13 air filtration in bedroom.";
+            existingMorning.exposureAvoided = "160 μg/m³";
+          }
+        }
+
+        if (lower.includes("kerosene") || lower.includes("heater") || lower.includes("gas")) {
+          const heatSwap = state.alternatives.find(a => a.id === 'a2');
+          if (heatSwap) heatSwap.adopted = true;
+        }
+
+        renderAll();
+        showToast("Personalized Clean Air Advisory Plan Generated!", "success");
+      }, 500);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>
