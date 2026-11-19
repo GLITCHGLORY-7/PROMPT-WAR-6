@@ -7,8 +7,14 @@
   "scripts": {
     "start": "node server.js",
     "build": "node -e \"console.log('AeroPulse AI: Production Ready')\"",
-    "lint": "node -e \"console.log('AeroPulse AI Code Quality: 0 lint errors, strict mode verified')\"",
-    "test": "node tests/run_all_audits.js"
+    "lint": "node tests/code_quality_audit.js",
+    "test": "node tests/run_all_audits.js",
+    "test:quality": "node tests/code_quality_audit.js",
+    "test:security": "node tests/security_audit.js",
+    "test:efficiency": "node tests/efficiency_audit.js",
+    "test:testing": "node tests/aeropulse.test.js && node tests/e2e.test.js",
+    "test:a11y": "node tests/a11y_audit.js",
+    "test:alignment": "node tests/problem_alignment_audit.js"
   },
   "keywords": [
     "air-quality",
