@@ -2,8 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "functions": {
+    "app.js": {
+      "includeFiles": "{index.html,styles.css,manifest.json,prompts/**,src/**}"
+    },
     "server.js": {
-      "includeFiles": "{index.html,styles.css,app.js,manifest.json,prompts/**}"
+      "includeFiles": "{index.html,styles.css,manifest.json,prompts/**,src/**}"
     }
   }
 }

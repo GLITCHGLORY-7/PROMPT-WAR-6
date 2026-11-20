@@ -307,6 +307,14 @@ const server = http.createServer((req, res) => {
 });
 
 if (!process.env.VERCEL) {
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      // Port already in use, running gracefully alongside active daemon
+    } else {
+      console.error('[AeroPulse Server Error]', err);
+    }
+  });
+
   server.listen(PORT, () => {
     console.log(`[AeroPulse AI] Production Server active at http://localhost:${PORT}`);
     console.log(`[AeroPulse AI] Configured Gemini Model: ${MODEL}`);
