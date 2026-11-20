@@ -22,7 +22,7 @@ The system strictly enforces the following immutable architectural rules:
 
 1. **Zero External Runtime Blocking**:
    - The application core must remain 100% operational offline.
-   - External LLM APIs (Gemini 2.0 Flash) must have seamless, deterministic algorithmic synthesis fallbacks to prevent runtime failures during automated scoring or network partitions.
+   - External LLM APIs (Gemini 1.5 Flash Production) must have seamless, deterministic algorithmic synthesis fallbacks to prevent runtime failures during automated scoring or network partitions.
 2. **Deterministic Mathematical Integrity**:
    - Every impact metric ($\text{PM}_{2.5}$ avoided, carbon saved, cost reduced) must derive from published scientific baselines:
      - *Berkeley Earth Standard*: $22\,\mu\text{g/m}^3 \text{ of PM}_{2.5} \text{ over 24 hrs} \approx 1 \text{ passive cigarette}$.

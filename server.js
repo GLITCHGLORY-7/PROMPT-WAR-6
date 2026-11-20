@@ -402,6 +402,12 @@ const server = http.createServer((req, res) => {
   if (rawPath.startsWith('/')) rawPath = rawPath.slice(1);
   if (!rawPath) rawPath = 'index.html';
 
+  /**
+   * Resolves static assets across local and Vercel serverless directories.
+   *
+   * @param {string} relPath - Relative file path requested.
+   * @returns {string|null} Resolved absolute file path or null if not found.
+   */
   function resolveStaticPath(relPath) {
     const cleanRel = path.normalize(relPath).replace(/^(\.\.[\/\\])+/, '');
     const searchDirs = [

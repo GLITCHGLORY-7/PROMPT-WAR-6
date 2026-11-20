@@ -1,5 +1,6 @@
 /**
  * AeroPulse AI — Vercel Serverless Function: /api/pledge
+ * Handles community pact retrieval and atomic pledge commitment incrementation.
  */
 
 const pledges = [
@@ -29,6 +30,13 @@ const pledges = [
   }
 ];
 
+/**
+ * Serverless HTTP Handler for Community Pledges.
+ *
+ * @param {import('node:http').IncomingMessage} req - Incoming HTTP request stream.
+ * @param {import('node:http').ServerResponse} res - Server HTTP response stream.
+ * @returns {Promise<void>}
+ */
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -63,24 +71,17 @@ export default async function handler(req, res) {
       });
     }
 
-    const { action, pledgeId, title, goal, area } = payload;
-    if (action === 'create' && title && goal) {
-      const newPledge = {
-        id: `p_${Date.now()}`,
-        title: String(title).slice(0, 80),
-        members: 1,
-        impact: String(goal).slice(0, 120),
-        status: "Active Zone",
-        area: String(area || 'Local District').slice(0, 50)
-      };
-      res.writeHead(201);
-      res.end(JSON.stringify({ success: true, pledge: newPledge }));
-      return;
-    }
-
-    if (action === 'join' && pledgeId) {
-      res.writeHead(200);
-      res.end(JSON.stringify({ success: true, updatedMembers: 2 }));
+    const pledgeId = payload.pledgeId;
+    if (pledgeId) {
+      const p = pledges.find(x => x.id === pledgeId);
+      if (p) {
+        p.members += 1;
+        res.writeHead(200);
+        res.end(JSON.stringify({ success: true, updatedMembers: p.members }));
+        return;
+      }
+      res.writeHead(404);
+      res.end(JSON.stringify({ error: 'Pledge not found' }));
       return;
     }
 
@@ -90,5 +91,5 @@ export default async function handler(req, res) {
   }
 
   res.writeHead(405);
-  res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+  res.end(JSON.stringify({ error: 'Method not allowed' }));
 }

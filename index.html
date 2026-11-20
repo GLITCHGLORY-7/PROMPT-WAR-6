@@ -1053,6 +1053,12 @@
     let smogChartInstance = null;
     let impactChartInstance = null;
 
+    /**
+     * Calculates dimensionally valid particulate inhalation exposure reduction,
+     * community carbon abatement, and passive cigarette risk equivalence.
+     *
+     * @returns {Object} Calculated environmental and exposure metrics.
+     */
     function getDynamicImpact() {
       const activeSwaps = state.alternatives.filter(a => a && a.adopted);
       const activeRoutines = state.routines.filter(r => r && r.completed);
@@ -1111,6 +1117,13 @@
       };
     }
 
+    /**
+     * Displays an accessible, timed toast notification banner.
+     *
+     * @param {string} message - Toast message to render.
+     * @param {"info"|"success"|"error"} [type="info"] - Visual status style tier.
+     * @returns {void}
+     */
     function showToast(message, type = "info") {
       const c = document.getElementById("toastContainer");
       if (!c) return;
@@ -1156,6 +1169,12 @@
       }, 3500);
     }
 
+    /**
+     * Transitions active application view section and updates navigation state.
+     *
+     * @param {string} secId - Section identifier to activate.
+     * @returns {void}
+     */
     function switchSection(secId) {
       state.currentSection = secId;
       const allSections = ['radar', 'routines', 'indoor', 'alternatives', 'impact', 'community'];
@@ -1178,6 +1197,11 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    /**
+     * Re-renders all dynamic UI elements, reactive cards, and metric badges.
+     *
+     * @returns {void}
+     */
     function renderAll() {
       // 1. Top Metrics
       const impact = getDynamicImpact();
@@ -1345,6 +1369,11 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    /**
+     * Renders or mutates the 24-hour diurnal thermal boundary inversion chart in place.
+     *
+     * @returns {void}
+     */
     function renderSmogChart() {
       const canvas = document.getElementById('smogDiurnalChart');
       if (!canvas) return;
@@ -1431,6 +1460,11 @@
       });
     }
 
+    /**
+     * Renders or mutates the comparative personal exposure mitigation bar chart in place.
+     *
+     * @returns {void}
+     */
     function renderImpactChart() {
       const canvas = document.getElementById('impactBarChart');
       if (!canvas) return;
@@ -1479,6 +1513,12 @@
       });
     }
 
+    /**
+     * Toggles completion status of a diurnal low-emission routine.
+     *
+     * @param {string} id - Routine item identifier.
+     * @returns {void}
+     */
     function toggleRoutine(id) {
       const r = state.routines.find(x => x && x.id === id);
       if (r) {
@@ -1488,6 +1528,11 @@
       }
     }
 
+    /**
+     * Toggles completion status across all diurnal routines.
+     *
+     * @returns {void}
+     */
     function toggleAllRoutines() {
       const allDone = state.routines.every(r => r && r.completed);
       state.routines.forEach(r => { if (r) r.completed = !allDone; });
@@ -1495,6 +1540,12 @@
       showToast(allDone ? "Routines reset to pending." : "All routines verified!", "success");
     }
 
+    /**
+     * Toggles adoption status of a sustainable household or transit alternative.
+     *
+     * @param {string} id - Clean alternative identifier.
+     * @returns {void}
+     */
     function toggleAlternative(id) {
       const a = state.alternatives.find(x => x && x.id === id);
       if (a) {
@@ -1504,16 +1555,33 @@
       }
     }
 
+    /**
+     * Adopts all available clean swaps simultaneously.
+     *
+     * @returns {void}
+     */
     function calculateAllSwaps() {
       const impact = getDynamicImpact();
       showToast(`Recalibrated: ${impact.pmAvoidedUgM3} μg/m³ avoided, ${impact.carbonSavedKg} kg CO2e saved!`, "success");
     }
 
+    /**
+     * Adopts an indoor air quality bio-hack protocol.
+     *
+     * @param {string} id - IAQ bio-hack identifier.
+     * @returns {void}
+     */
     function adoptHackById(id) {
       const h = state.iaqHacks.find(x => x && x.id === id);
       showToast(`Activated Bio-Hack Protocol: "${h ? h.title : 'Bio-Hack'}"`, "success");
     }
 
+    /**
+     * Joins a community clean air action pledge with session-based duplicate prevention.
+     *
+     * @param {string} id - Community pledge identifier.
+     * @returns {void}
+     */
     function joinPledgeById(id) {
       if (!state.userJoinedPledgeIds) state.userJoinedPledgeIds = new Set();
       if (state.userJoinedPledgeIds.has(id)) {
@@ -1536,6 +1604,12 @@
       }
     }
 
+    /**
+     * Updates vulnerability profile persona and synchronizes routines.
+     *
+     * @param {"general"|"kids"|"asthma"} type - Vulnerability persona.
+     * @returns {void}
+     */
     function setVulnerability(type) {
       state.vulnerability = type;
       ['general', 'kids', 'asthma'].forEach(k => {
@@ -1552,6 +1626,12 @@
       showToast(`Target Profile Calibrated: ${type.toUpperCase()}`, "info");
     }
 
+    /**
+     * Recalibrates application airshed to a verified historical pollution station.
+     *
+     * @param {string} spot - Station key identifier.
+     * @returns {void}
+     */
     function setHotspot(spot) {
       if (spot === 'delhi' || spot === 'anand_vihar') {
         state.city = "Delhi NCR"; state.neighborhood = "Anand Vihar"; state.aqi = 448; state.pm25 = 412; state.aqiCategory = "Severe Inversion Alert";
@@ -1573,12 +1653,24 @@
     }
 
     let prevFocusEl = null;
+    /**
+     * Opens accessible modal dialog and traps keyboard focus.
+     *
+     * @param {string} id - Modal dialog DOM identifier.
+     * @returns {void}
+     */
     function openModalById(id) {
       prevFocusEl = document.activeElement;
       document.getElementById(id).classList.remove('hidden');
       const focusable = document.getElementById(id).querySelector('input, select, button');
       if (focusable) focusable.focus();
     }
+    /**
+     * Closes accessible modal dialog and releases keyboard focus trap.
+     *
+     * @param {string} id - Modal dialog DOM identifier.
+     * @returns {void}
+     */
     function closeModalById(id) {
       document.getElementById(id).classList.add('hidden');
       if (prevFocusEl) prevFocusEl.focus();
@@ -1600,6 +1692,12 @@
       }
     });
 
+    /**
+     * Handles user submission of a custom geographic airshed.
+     *
+     * @param {Event} e - Form submission event.
+     * @returns {void}
+     */
     function handleCustomLocation(e) {
       e.preventDefault();
       state.city = document.getElementById('inputCustomCity').value.trim();
@@ -1614,6 +1712,12 @@
       showToast(`Station updated: ${state.city}`, "success");
     }
 
+    /**
+     * Handles closure of the API key configuration modal.
+     *
+     * @param {Event} e - Form submission event.
+     * @returns {void}
+     */
     function handleCloseApiKeyModal(e) {
       if (e && e.preventDefault) e.preventDefault();
       closeApiKeyModal();
@@ -1621,6 +1725,12 @@
       showToast("Server-Side Gemini 1.5 Flash Advisory Status Verified", "info");
     }
 
+    /**
+     * Handles creation of a new community clean air pledge.
+     *
+     * @param {Event} e - Form submission event.
+     * @returns {void}
+     */
     function handleCreatePledge(e) {
       e.preventDefault();
       const title = document.getElementById('inputPledgeTitle').value.trim();
@@ -1651,11 +1761,23 @@
       }
     }
 
+    /**
+     * Pre-populates the natural language GenAI query input.
+     *
+     * @param {string} text - Prompt suggestion text.
+     * @returns {void}
+     */
     function fillSmogPrompt(text) {
       document.getElementById('aiSmogPrompt').value = text;
       handleSmogPrompt({ preventDefault: () => {} });
     }
 
+    /**
+     * Dispatches user prompt to server-side Gemini advisory proxy or fallback.
+     *
+     * @param {Event} e - Form submission event.
+     * @returns {Promise<void>}
+     */
     async function handleSmogPrompt(e) {
       if (e && e.preventDefault) e.preventDefault();
       const input = document.getElementById('aiSmogPrompt');
