@@ -1,0 +1,16 @@
+{
+  "name": "AeroPulse AI — National Atmospheric Inversion Navigator",
+  "short_name": "AeroPulse",
+  "description": "GenAI-powered atmospheric inversion modeling, low-emission routines, and indoor air quality bio-hacks for families and communities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070B14",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563EB'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
